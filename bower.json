@@ -14,7 +14,8 @@
     "test*",
     "demo*",
     "gruntFile.js",
-    "package.json"
+    "package.json",
+    "!dist"
   ],
   "repository": {
     "type": "git",
