@@ -43,7 +43,7 @@ function uiCodemirrorDirective($timeout, uiCodemirrorConfig) {
       scope
     );
 
-    configNgModelLink(codemirror, ngModel, scope);
+    configNgModelLink(codemirror, ngModel, scope, codemirrorOptions);
 
     configUiRefreshAttribute(codemirror, iAttrs.uiRefresh, scope);
 
@@ -99,7 +99,7 @@ function uiCodemirrorDirective($timeout, uiCodemirrorConfig) {
     }
   }
 
-  function configNgModelLink(codemirror, ngModel, scope) {
+  function configNgModelLink(codemirror, ngModel, scope, options) {
     if (!ngModel) { return; }
     // CodeMirror expects a string, so make sure it gets one.
     // This does not change the model.
@@ -122,9 +122,14 @@ function uiCodemirrorDirective($timeout, uiCodemirrorConfig) {
       codemirror.setValue(safeViewValue);
     };
 
+    var ngModelUpdateEvent = 'change';
+
+    if (options.ngModelUpdateOn) {
+      ngModelUpdateEvent = options.ngModelUpdateOn;
+    }
 
     // Keep the ngModel in sync with changes from CodeMirror
-    codemirror.on('change', function(instance) {
+    codemirror.on(ngModelUpdateEvent, function(instance) {
       var newValue = instance.getValue();
       if (newValue !== ngModel.$viewValue) {
         scope.$evalAsync(function() {
